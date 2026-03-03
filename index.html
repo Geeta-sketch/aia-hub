@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AIA SharePoint Full Draft</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#C8102E;--red-h:#A00D24;--red-lt:#FEE2E2;--red-ll:#FFF5F6;
+  --navy:#1B2A4A;--navy2:#2D3F62;
+  --gray:#F5F6F8;--gray2:#E8EAED;--gray3:#9CA3AF;
+  --text:#1F2937;--sub:#6B7280;
+  --white:#fff;--border:#E5E7EB;
+  --shadow:0 2px 12px rgba(0,0,0,0.07);
+  --shadow-h:0 6px 28px rgba(0,0,0,0.13);
+}
+body{font-family:'Inter',sans-serif;background:#E8EBF0;color:var(--text);font-size:14px;min-height:100vh}
+.page-selector{background:var(--navy);padding:14px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ps-label{color:rgba(255,255,255,0.45);font-size:0.72rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-right:4px}
+.ps-btn{padding:7px 16px;border-radius:20px;font-size:0.75rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.65);background:transparent;transition:all .2s;white-space:nowrap}
+.ps-btn:hover{border-color:rgba(255,255,255,0.5);color:#fff}
+.ps-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+.site{background:#fff;max-width:1180px;margin:0 auto;box-shadow:0 0 40px rgba(0,0,0,0.12)}
+.ms-bar{background:#fff;border-bottom:1px solid var(--border);height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-size:0.72rem;color:var(--sub)}
+.ms-left{display:flex;align-items:center;gap:14px}
+.waffle{display:grid;grid-template-columns:repeat(3,5px);gap:2px}
+.wd{width:5px;height:5px;background:var(--sub);border-radius:1px}
+.ms-app{font-weight:700;color:#0078D4;font-size:0.82rem}
+.ms-crumb{color:var(--gray3);font-size:0.72rem}
+.ms-right{display:flex;align-items:center;gap:12px}
+.ms-avatar{width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-weight:800;font-size:0.7rem;display:flex;align-items:center;justify-content:center}
+.site-hdr{background:var(--navy);height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+.hdr-brand{display:flex;align-items:center;gap:14px}
+.lilly-mark{font-size:1.15rem;font-weight:900;color:#fff;letter-spacing:-0.3px}
+.lilly-mark em{color:var(--red);font-style:normal}
+.hdr-sep{width:1px;height:20px;background:rgba(255,255,255,0.2)}
+.hdr-site{font-size:0.8rem;color:rgba(255,255,255,0.55);font-weight:500}
+.hdr-search{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:6px 14px;color:rgba(255,255,255,0.45);font-size:0.78rem;min-width:200px}
+.site-nav{background:var(--navy2);border-bottom:3px solid var(--red);display:flex;overflow-x:auto;padding:0 20px}
+.site-nav::-webkit-scrollbar{display:none}
+.sn{padding:11px 16px;font-size:0.77rem;font-weight:500;color:rgba(255,255,255,0.65);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;white-space:nowrap;transition:all .2s}
+.sn:hover{color:#fff;background:rgba(255,255,255,0.06)}
+.sn.active{color:#fff;border-bottom-color:#fff;font-weight:700}
+.page{display:none}
+.page.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.hero{position:relative;background:linear-gradient(115deg,var(--navy) 0%,var(--navy2) 50%,#1a3668 100%);padding:44px 36px;overflow:hidden;min-height:210px;display:flex;align-items:center}
+.hero-left-bar{position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--red)}
+.hero-pattern{position:absolute;right:0;top:0;bottom:0;width:45%;background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(255,255,255,0.015) 20px,rgba(255,255,255,0.015) 40px)}
+.hero-glow{position:absolute;right:-60px;top:-60px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(200,16,46,0.12),transparent 70%)}
+.hero-content{position:relative;z-index:2;max-width:580px}
+.hero-eye{font-size:0.65rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--red);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.hero-eye::before{content:'';width:18px;height:2px;background:var(--red)}
+.hero h1{font-size:1.9rem;font-weight:900;color:#fff;line-height:1.15;margin-bottom:10px}
+.hero h1 strong{color:var(--red)}
+.hero p{color:rgba(255,255,255,0.6);font-size:0.85rem;line-height:1.65;margin-bottom:22px}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn-r{background:var(--red);color:#fff;border:none;border-radius:6px;padding:9px 20px;font-size:0.78rem;font-weight:700;cursor:pointer}
+.btn-r:hover{background:var(--red-h)}
+.btn-w{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.3);border-radius:6px;padding:9px 20px;font-size:0.78rem;font-weight:600;cursor:pointer}
+.hero-stats{position:absolute;right:36px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:2}
+.hs{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 18px;text-align:center;backdrop-filter:blur(4px)}
+.hs-n{font-size:1.5rem;font-weight:900;color:#fff}
+.hs-l{font-size:0.62rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.aud-bar{background:#fff;border-bottom:2px solid var(--gray2);padding:0 24px;display:flex;align-items:center;gap:0}
+.aud-label{font-size:0.68rem;color:var(--gray3);text-transform:uppercase;letter-spacing:1px;font-weight:600;padding:12px 0;margin-right:16px;white-space:nowrap}
+.aud-tab{padding:12px 16px;font-size:0.78rem;font-weight:500;color:var(--gray3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.aud-tab:hover{color:var(--text)}
+.aud-tab.active{color:var(--red);border-bottom-color:var(--red);font-weight:700}
+.layout{display:grid;grid-template-columns:1fr 280px;gap:20px;padding:22px 24px;background:var(--gray)}
+.layout.full{grid-template-columns:1fr}
+.col-side{display:flex;flex-direction:column;gap:16px}
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden;transition:box-shadow .2s;cursor:default}
+.kpi:hover{box-shadow:var(--shadow-h)}
+.kpi-bar{position:absolute;bottom:0;left:0;right:0;height:3px}
+.kpi-v{font-size:1.55rem;font-weight:900;color:var(--text)}
+.kpi-l{font-size:0.65rem;color:var(--gray3);text-transform:uppercase;letter-spacing:.8px;margin-top:2px;font-weight:500}
+.kpi-d{font-size:0.7rem;margin-top:6px;font-weight:600}
+.up{color:#059669}.dn{color:var(--red)}.flat{color:var(--gray3)}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sh h2{font-size:0.9rem;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:8px}
+.sh h2::before{content:'';width:4px;height:15px;background:var(--red);border-radius:2px}
+.sh a{font-size:0.72rem;color:var(--red);font-weight:600;text-decoration:none;cursor:pointer}
+.mb{margin-bottom:18px}
+.ql-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.ql{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px 12px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.ql:hover{box-shadow:var(--shadow-h);border-color:var(--red);transform:translateY(-2px)}
+.ql-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin:0 auto 8px}
+.ql-n{font-size:0.75rem;font-weight:700;color:var(--text)}
+.ql-s{font-size:0.65rem;color:var(--gray3);margin-top:2px}
+.news-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.nc{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .2s}
+.nc:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}
+.nc-img{height:88px;display:flex;align-items:center;justify-content:center;font-size:1.8rem}
+.nc-body{padding:12px}
+.nc-tag{display:inline-block;background:var(--red-lt);color:var(--red);border-radius:4px;padding:2px 8px;font-size:0.62rem;font-weight:700;text-transform:uppercase;margin-bottom:5px}
+.nc-title{font-size:0.78rem;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:5px}
+.nc-date{font-size:0.65rem;color:var(--gray3)}
+.ob-panel{background:linear-gradient(120deg,var(--navy),var(--navy2));border-radius:12px;padding:22px 24px;margin-bottom:18px;position:relative;overflow:hidden}
+.ob-panel::after{content:'';position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:rgba(200,16,46,0.12)}
+.ob-panel h3{color:#fff;font-size:0.9rem;font-weight:800;margin-bottom:4px}
+.ob-panel p{color:rgba(255,255,255,0.55);font-size:0.75rem;margin-bottom:16px;line-height:1.55}
+.ob-steps{display:flex;flex-direction:column;gap:10px}
+.ob-step{display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 14px;cursor:pointer;transition:all .2s}
+.ob-step:hover{background:rgba(255,255,255,0.11)}
+.ob-num{width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;font-size:0.7rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ob-txt strong{display:block;font-size:0.78rem;color:#fff;font-weight:700}
+.ob-txt span{font-size:0.68rem;color:rgba(255,255,255,0.5)}
+.sc{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.sc-head{background:var(--navy);padding:11px 16px;font-size:0.75rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
+.sc-body{padding:14px 16px}
+.act-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray2)}
+.act-item:last-child{border-bottom:none}
+.act-dot{width:8px;height:8px;border-radius:50%;background:var(--red);margin-top:5px;flex-shrink:0}
+.act-txt{font-size:0.74rem;color:var(--text);line-height:1.45}
+.act-txt strong{color:var(--navy)}
+.act-time{font-size:0.63rem;color:var(--gray3);margin-top:2px}
+.contact-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray2)}
+.contact-row:last-child{border-bottom:none}
+.c-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;color:#fff;flex-shrink:0}
+.c-nm{font-size:0.77rem;font-weight:700;color:var(--text)}
+.c-rl{font-size:0.65rem;color:var(--gray3)}
+.tr-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--gray2)}
+.tr-row:last-child{border-bottom:none}
+.tr-nm{font-size:0.73rem;color:var(--text);flex:1;font-weight:500}
+.tr-bar{flex:1;height:5px;background:var(--gray2);border-radius:3px;overflow:hidden}
+.tr-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--red),#F4758D)}
+.tr-pct{font-size:0.67rem;font-weight:700;color:var(--gray3);width:30px;text-align:right}
+.sc-link{display:block;font-size:0.72rem;color:var(--red);font-weight:600;margin-top:10px;cursor:pointer;text-decoration:none}
+.subpage-hero{background:linear-gradient(110deg,var(--navy),var(--navy2));padding:30px 28px;border-bottom:4px solid var(--red);position:relative;overflow:hidden}
+.subpage-hero::after{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(200,16,46,0.1)}
+.subpage-hero h2{font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:6px}
+.subpage-hero p{color:rgba(255,255,255,0.55);font-size:0.82rem;line-height:1.55;max-width:500px}
+.subpage-hero .breadcrumb{font-size:0.68rem;color:rgba(255,255,255,0.35);margin-bottom:10px}
+.subpage-hero .breadcrumb span{color:rgba(255,255,255,0.6)}
+.content-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:16px}
+.content-card h3{font-size:0.9rem;font-weight:800;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.content-card h3::before{content:'';width:3px;height:14px;background:var(--red);border-radius:2px}
+.content-card p{font-size:0.8rem;color:var(--sub);line-height:1.65;margin-bottom:10px}
+.content-card ul{padding-left:18px;font-size:0.8rem;color:var(--sub);line-height:1.8}
+.doc-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;background:#fff;cursor:pointer;transition:all .2s}
+.doc-row:hover{border-color:var(--red);box-shadow:var(--shadow)}
+.doc-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.doc-name{font-size:0.8rem;font-weight:600;color:var(--text);flex:1}
+.doc-meta{font-size:0.68rem;color:var(--gray3)}
+.doc-tag{display:inline-block;border-radius:4px;padding:2px 8px;font-size:0.65rem;font-weight:700}
+.dt-draft{background:#FEF3C7;color:#92400E}
+.dt-final{background:#D1FAE5;color:#065F46}
+.dt-arch{background:#F3F4F6;color:#6B7280}
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.metric{background:#fff;border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center;position:relative;overflow:hidden}
+.metric::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
+.metric.r::after{background:var(--red)}.metric.g::after{background:#10B981}.metric.b::after{background:#3B82F6}
+.metric.a::after{background:#F59E0B}.metric.p::after{background:#8B5CF6}.metric.n::after{background:var(--navy)}
+.m-val{font-size:2rem;font-weight:900;color:var(--navy)}
+.m-lbl{font-size:0.68rem;color:var(--gray3);text-transform:uppercase;letter-spacing:.8px;margin-top:3px}
+.m-trend{font-size:0.72rem;font-weight:700;margin-top:6px}
+.lrl-section{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.lrl-head{padding:16px 20px;border-left:4px solid var(--red);display:flex;align-items:center;gap:12px}
+.lrl-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.lrl-title{font-size:0.88rem;font-weight:800;color:var(--navy)}
+.lrl-sub{font-size:0.72rem;color:var(--gray3);margin-top:2px}
+.lrl-body{padding:16px 20px;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+.lrl-file{display:flex;align-items:center;gap:8px;background:var(--gray);border:1px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;transition:all .2s}
+.lrl-file:hover{border-color:var(--red);background:var(--red-ll)}
+.lrl-file-ico{font-size:1rem;flex-shrink:0}
+.lrl-file-nm{font-size:0.73rem;font-weight:600;color:var(--text)}
+.lrl-file-sz{font-size:0.63rem;color:var(--gray3)}
+.perm-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin-bottom:16px}
+.perm-t{width:100%;border-collapse:collapse;font-size:0.78rem}
+.perm-t th{background:var(--navy);color:#fff;padding:11px 14px;text-align:center;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.1)}
+.perm-t th:first-child{text-align:left}
+.perm-t td{padding:10px 14px;border-bottom:1px solid var(--gray2);text-align:center;color:var(--gray3)}
+.perm-t td:first-child{text-align:left;color:var(--text);font-weight:500}
+.perm-t tr:last-child td{border-bottom:none}
+.perm-t tr:hover td{background:var(--gray)}
+.chk{color:#059669;font-weight:800;font-size:1rem}.crs{color:var(--gray2);font-size:1rem}.vw{color:#F59E0B;font-size:0.72rem;font-weight:700}
+.trk-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
+.trk-t{width:100%;border-collapse:collapse;font-size:0.78rem}
+.trk-t th{background:var(--navy2);color:#fff;padding:11px 14px;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.1);white-space:nowrap}
+.trk-t td{padding:10px 14px;border-bottom:1px solid var(--gray2);white-space:nowrap;color:var(--sub)}
+.trk-t td:first-child{color:var(--text);font-weight:600}
+.trk-t tr:hover td{background:var(--gray)}
+.bd{background:#D1FAE5;color:#065F46;border-radius:20px;padding:2px 10px;font-size:0.67rem;font-weight:700}
+.bp{background:#FEF3C7;color:#92400E;border-radius:20px;padding:2px 10px;font-size:0.67rem;font-weight:700}
+.bn{background:#F3F4F6;color:#6B7280;border-radius:20px;padding:2px 10px;font-size:0.67rem;font-weight:700}
+.pbar{height:6px;border-radius:3px;background:var(--gray2);display:inline-block;width:70px;vertical-align:middle;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--red),#F47C8A);border-radius:3px}
+.tl{padding-left:28px;position:relative}
+.tl::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--red),var(--gray2))}
+.tl-item{position:relative;margin-bottom:24px}
+.tl-dot{position:absolute;left:-24px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--red);border:2px solid #fff;box-shadow:0 0 0 2px var(--red)}
+.tl-wk{font-size:0.65rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.tl-ph{font-size:0.85rem;font-weight:800;color:var(--navy);margin-bottom:4px}
+.tl-de{font-size:0.78rem;color:var(--sub);line-height:1.6}
+.site-footer{background:var(--navy);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.sf-brand{font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.4)}
+.sf-brand strong{color:var(--red)}
+.sf-links{display:flex;gap:16px}
+.sf-links a{font-size:0.7rem;color:rgba(255,255,255,0.35);text-decoration:none;cursor:pointer}
+.sf-links a:hover{color:rgba(255,255,255,0.7)}
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:3px 10px;font-size:0.67rem;font-weight:700}
+.badge-red{background:var(--red-lt);color:var(--red)}.badge-green{background:#D1FAE5;color:#065F46}
+.badge-blue{background:#DBEAFE;color:#1E40AF}.badge-amber{background:#FEF3C7;color:#92400E}
+.badge-purple{background:#EDE9FE;color:#5B21B6}
+@media(max-width:780px){
+  .layout{grid-template-columns:1fr}.col-side{display:none}
+  .kpi-row{grid-template-columns:repeat(3,1fr)}.ql-grid{grid-template-columns:repeat(2,1fr)}
+  .news-row{grid-template-columns:1fr}.hero-stats{display:none}.metric-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="page-selector">
+  <span class="ps-label">📄 View Page:</span>
+  <button class="ps-btn active" onclick="showPage('home',this)">🏠 Homepage</button>
+  <button class="ps-btn" onclick="showPage('dashboard',this)">📊 Leadership Dashboard</button>
+  <button class="ps-btn" onclick="showPage('projects',this)">📁 Project Info</button>
+  <button class="ps-btn" onclick="showPage('lrl',this)">🎓 LRL Training</button>
+  <button class="ps-btn" onclick="showPage('onboarding',this)">🚀 Onboarding Hub</button>
+  <button class="ps-btn" onclick="showPage('permissions',this)">🔐 Permissions</button>
+  <button class="ps-btn" onclick="showPage('tracker',this)">📊 Training Tracker</button>
+  <button class="ps-btn" onclick="showPage('rollout',this)">🗓️ Rollout Plan</button>
+</div>
+<div class="site">
+<div class="ms-bar">
+  <div class="ms-left">
+    <div class="waffle"><div class="wd"></div><div class="wd"></div><div class="wd"></div><div class="wd"></div><div class="wd"></div><div class="wd"></div><div class="wd"></div><div class="wd"></div><div class="wd"></div></div>
+    <span class="ms-app">SharePoint</span>
+    <span class="ms-crumb">CDDHub › AI & Tech Innovation › AIA Central Hub</span>
+  </div>
+  <div class="ms-right"><span>🔔</span><span>⚙️</span><span>❓</span><div class="ms-avatar">AK</div></div>
+</div>
+<div class="site-hdr">
+  <div class="hdr-brand">
+    <div class="lilly-mark">eli <em>lilly</em></div>
+    <div class="hdr-sep"></div>
+    <div class="hdr-site">AIA Central Hub</div>
+  </div>
+  <div class="hdr-search">🔍 Search this site...</div>
+</div>
+<div class="site-nav">
+  <div class="sn active" onclick="showPage('home',null);setNav(this)">🏠 Home</div>
+  <div class="sn" onclick="showPage('dashboard',null);setNav(this)">📊 Dashboard</div>
+  <div class="sn" onclick="showPage('projects',null);setNav(this)">📁 Project Info</div>
+  <div class="sn">📋 Templates</div>
+  <div class="sn" onclick="showPage('lrl',null);setNav(this)">🎓 LRL Training</div>
+  <div class="sn" onclick="showPage('onboarding',null);setNav(this)">🚀 Onboarding</div>
+  <div class="sn">👥 Teams</div>
+  <div class="sn">📣 News</div>
+</div>
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-left-bar"></div><div class="hero-pattern"></div><div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-eye">CSP AIA Programme</div>
+      <h1>Welcome to the<br/><strong>AIA</strong> Central Hub</h1>
+      <p>Your single source of truth for all CSP AIA information. Projects, templates, training, and team resources — all in one place.</p>
+      <div class="hero-btns">
+        <button class="btn-r" onclick="showPage('onboarding',null)">🚀 New Joiner? Start Here</button>
+        <button class="btn-w" onclick="showPage('projects',null)">📁 View Projects</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">12</div><div class="hs-l">Active Projects</div></div>
+      <div class="hs"><div class="hs-n">87%</div><div class="hs-l">Training Done</div></div>
+      <div class="hs"><div class="hs-n">5</div><div class="hs-l">PO Pairs</div></div>
+    </div>
+  </div>
+  <div class="aud-bar">
+    <span class="aud-label">View as:</span>
+    <div class="aud-tab active">👔 Leadership</div>
+    <div class="aud-tab">🧑‍💻 Team Member</div>
+    <div class="aud-tab">🌱 New Joiner</div>
+  </div>
+  <div class="layout">
+    <div class="col-main">
+      <div class="sh mb"><h2>Programme Overview</h2><a onclick="showPage('dashboard',null)">View Full Dashboard →</a></div>
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-bar" style="background:var(--red)"></div><div class="kpi-v">12</div><div class="kpi-l">Active Projects</div><div class="kpi-d up">↑ 2 this month</div></div>
+        <div class="kpi"><div class="kpi-bar" style="background:#10B981"></div><div class="kpi-v">87%</div><div class="kpi-l">Milestones Hit</div><div class="kpi-d up">↑ 4% vs last Q</div></div>
+        <div class="kpi"><div class="kpi-bar" style="background:#F59E0B"></div><div class="kpi-v">3</div><div class="kpi-l">Open Risks</div><div class="kpi-d dn">↑ 1 new risk</div></div>
+        <div class="kpi"><div class="kpi-bar" style="background:#3B82F6"></div><div class="kpi-v">91%</div><div class="kpi-l">Training Done</div><div class="kpi-d up">↑ 6% this week</div></div>
+        <div class="kpi"><div class="kpi-bar" style="background:#8B5CF6"></div><div class="kpi-v">5</div><div class="kpi-l">PO Pairs Active</div><div class="kpi-d flat">→ No change</div></div>
+      </div>
+      <div class="sh"><h2>Quick Links</h2></div>
+      <div class="ql-grid">
+        <div class="ql" onclick="showPage('projects',null)"><div class="ql-ico" style="background:#FEE2E2">📁</div><div class="ql-n">Project Info</div><div class="ql-s">Charters & requirements</div></div>
+        <div class="ql"><div class="ql-ico" style="background:#EFF6FF">📋</div><div class="ql-n">Templates</div><div class="ql-s">Standardised docs</div></div>
+        <div class="ql" onclick="showPage('lrl',null)"><div class="ql-ico" style="background:#ECFDF5">🎓</div><div class="ql-n">LRL Training</div><div class="ql-s">PO onboarding & modules</div></div>
+        <div class="ql"><div class="ql-ico" style="background:#F5F3FF">📂</div><div class="ql-n">Doc Library</div><div class="ql-s">All files & versions</div></div>
+        <div class="ql"><div class="ql-ico" style="background:#FFF7ED">👥</div><div class="ql-n">Team Pages</div><div class="ql-s">Per-team workspaces</div></div>
+        <div class="ql" onclick="showPage('dashboard',null)"><div class="ql-ico" style="background:#FDF2F8">📊</div><div class="ql-n">Dashboard</div><div class="ql-s">KPIs & milestones</div></div>
+        <div class="ql"><div class="ql-ico" style="background:#F0FDF4">🗓️</div><div class="ql-n">Meeting Notes</div><div class="ql-s">Archive & decisions</div></div>
+        <div class="ql"><div class="ql-ico" style="background:#EFF6FF">📣</div><div class="ql-n">Announcements</div><div class="ql-s">News & updates</div></div>
+      </div>
+      <div class="sh"><h2>Latest News & Updates</h2><a>See all →</a></div>
+      <div class="news-row">
+        <div class="nc"><div class="nc-img" style="background:#FEE2E2">🚀</div><div class="nc-body"><div class="nc-tag">Programme</div><div class="nc-title">AIA Hub officially launched — welcome to your new central home</div><div class="nc-date">📅 28 Feb 2026 · AIA Team</div></div></div>
+        <div class="nc"><div class="nc-img" style="background:#EFF6FF">🎓</div><div class="nc-body"><div class="nc-tag">Training</div><div class="nc-title">Cohort 3 onboarding packages now live in LRL Training Space</div><div class="nc-date">📅 24 Feb 2026 · LRL Team</div></div></div>
+        <div class="nc"><div class="nc-img" style="background:#ECFDF5">📋</div><div class="nc-body"><div class="nc-tag">Templates</div><div class="nc-title">Updated requirements template v2.1 now available for all teams</div><div class="nc-date">📅 20 Feb 2026 · Standards</div></div></div>
+      </div>
+      <div class="sh"><h2>New to the AIA Team?</h2></div>
+      <div class="ob-panel">
+        <h3>👋 Welcome — Start Your Journey Here</h3>
+        <p>Everything you need for a smooth first week. Follow the 3 steps below and you'll be up to speed in no time.</p>
+        <div class="ob-steps">
+          <div class="ob-step"><div class="ob-num">1</div><div class="ob-txt"><strong>Read the Welcome Message & Team Introduction</strong><span>Meet your team, understand the programme, get your access set up</span></div></div>
+          <div class="ob-step"><div class="ob-num">2</div><div class="ob-txt"><strong>Complete Your Onboarding Checklist</strong><span>Work through your Day 1–5 checklist — tools, meetings, introductions</span></div></div>
+          <div class="ob-step" onclick="showPage('lrl',null)"><div class="ob-num">3</div><div class="ob-txt"><strong>Access Your LRL Training Package</strong><span>Find your PO pair training kit and complete all four modules</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-side">
+      <div class="sc">
+        <div class="sc-head">⚡ Recent Activity</div>
+        <div class="sc-body">
+          <div class="act-item"><div class="act-dot"></div><div><div class="act-txt"><strong>Jordan P</strong> completed Module 2 — Generic Training</div><div class="act-time">2 hours ago</div></div></div>
+          <div class="act-item"><div class="act-dot"></div><div><div class="act-txt"><strong>Sarah M</strong> uploaded a new requirements document</div><div class="act-time">Yesterday 3:45 PM</div></div></div>
+          <div class="act-item"><div class="act-dot"></div><div><div class="act-txt"><strong>Cohort 3</strong> onboarding package published to LRL</div><div class="act-time">24 Feb 2026</div></div></div>
+          <div class="act-item"><div class="act-dot"></div><div><div class="act-txt"><strong>Templates v2.1</strong> updated by Standards Team</div><div class="act-time">20 Feb 2026</div></div></div>
+        </div>
+      </div>
+      <div class="sc">
+        <div class="sc-head">📊 Training Progress</div>
+        <div class="sc-body">
+          <div class="tr-row"><div class="tr-nm">Cohort 1</div><div class="tr-bar"><div class="tr-fill" style="width:100%"></div></div><div class="tr-pct">100%</div></div>
+          <div class="tr-row"><div class="tr-nm">Cohort 2</div><div class="tr-bar"><div class="tr-fill" style="width:50%"></div></div><div class="tr-pct">50%</div></div>
+          <div class="tr-row"><div class="tr-nm">Cohort 3</div><div class="tr-bar"><div class="tr-fill" style="width:25%"></div></div><div class="tr-pct">25%</div></div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--gray2)">
+            <div style="font-size:0.67rem;color:var(--gray3);text-transform:uppercase;letter-spacing:.8px;font-weight:600;margin-bottom:5px">Overall</div>
+            <div style="display:flex;align-items:center;gap:10px"><div class="tr-bar" style="flex:1"><div class="tr-fill" style="width:87%"></div></div><div style="font-size:1rem;font-weight:900;color:var(--navy)">87%</div></div>
+          </div>
+          <a class="sc-link" onclick="showPage('tracker',null)">View full tracker →</a>
+        </div>
+      </div>
+      <div class="sc">
+        <div class="sc-head">👥 Key Contacts</div>
+        <div class="sc-body">
+          <div class="contact-row"><div class="c-av" style="background:var(--red)">AK</div><div><div class="c-nm">Amira Khalil</div><div class="c-rl">Programme Lead</div></div></div>
+          <div class="contact-row"><div class="c-av" style="background:var(--navy)">CL</div><div><div class="c-nm">Clement L.</div><div class="c-rl">Site Owner</div></div></div>
+          <div class="contact-row"><div class="c-av" style="background:#7C3AED">SM</div><div><div class="c-nm">Sarah M.</div><div class="c-rl">LRL Training Lead</div></div></div>
+          <div class="contact-row"><div class="c-av" style="background:#0284C7">JP</div><div><div class="c-nm">Jordan P.</div><div class="c-rl">PO Pair · Cohort 2</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="page-dashboard" class="page">
+  <div class="subpage-hero">
+    <div class="breadcrumb">🏠 Home › <span>Leadership Dashboard</span></div>
+    <h2>📊 Leadership Dashboard</h2>
+    <p>High-level programme overview — KPIs, milestone tracking, risks, and latest status updates.</p>
+  </div>
+  <div class="layout full" style="padding:22px 24px;background:var(--gray)">
+    <div class="metric-grid">
+      <div class="metric r"><div class="m-val">12</div><div class="m-lbl">Active Projects</div><div class="m-trend up">↑ 2 this month</div></div>
+      <div class="metric g"><div class="m-val">87%</div><div class="m-lbl">Milestones On Track</div><div class="m-trend up">↑ 4% vs Q3</div></div>
+      <div class="metric a"><div class="m-val">3</div><div class="m-lbl">Open Risks</div><div class="m-trend dn">↑ 1 escalated</div></div>
+      <div class="metric b"><div class="m-val">91%</div><div class="m-lbl">Training Completion</div><div class="m-trend up">↑ 6% this week</div></div>
+      <div class="metric p"><div class="m-val">5</div><div class="m-lbl">PO Pairs Active</div><div class="m-trend flat">→ Stable</div></div>
+      <div class="metric n"><div class="m-val">2</div><div class="m-lbl">Decisions Needed</div><div class="m-trend dn">⚠ Action required</div></div>
+    </div>
+    <div class="content-card">
+      <h3>📋 Milestone Status</h3>
+      <table style="width:100%;font-size:0.8rem;border-collapse:collapse">
+        <thead><tr style="background:var(--gray)"><th style="padding:9px 12px;text-align:left;font-weight:700;color:var(--navy);border-bottom:1px solid var(--border)">Milestone</th><th style="padding:9px 12px;font-weight:700;color:var(--navy);border-bottom:1px solid var(--border)">Due</th><th style="padding:9px 12px;font-weight:700;color:var(--navy);border-bottom:1px solid var(--border)">Owner</th><th style="padding:9px 12px;font-weight:700;color:var(--navy);border-bottom:1px solid var(--border)">Status</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:9px 12px;border-bottom:1px solid var(--gray2)">AIA Hub Site Go-Live</td><td style="padding:9px 12px;border-bottom:1px solid var(--gray2);text-align:center">28 Feb</td><td style="padding:9px 12px;border-bottom:1px solid var(--gray2);text-align:center">Amira K</td><td style="padding:9px 12px;border-bottom:1px solid var(--gray2);text-align:center"><span class="badge badge-green">✔ Complete</span></td></tr>
+          <tr><td style="padding:9px 12px;border-bottom:1px solid var(--gray2)">Cohort 3 Onboarding</td><td style="padding:9px 12px;border-bottom:1px solid var(--gray2);text-align:center">15 Mar</td><td style="padding:9px 12px;border-bottom:1px solid var(--gray2);text-align:center">Sarah M</td><td style="padding:9px 12px;border-bottom:1px solid var(--gray2);text-align:center"><span class="badge badge-amber">⏳ In Progress</span></td></tr>
+          <tr><td style="padding:9px 12px;border-bottom:1px solid var(--gray2)">Templates v2 Rollout</td><td style="padding:9px 12px;border-bottom:1px solid var(--gray2);text-align:center">20 Mar</td><td style="padding:9px 12px;border-bottom:1px solid var(--gray2);text-align:center">Standards</td><td style="padding:9px 12px;border-bottom:1px solid var(--gray2);text-align:center"><span class="badge badge-green">✔ Complete</span></td></tr>
+          <tr><td style="padding:9px 12px">Q2 Programme Review</td><td style="padding:9px 12px;text-align:center">01 Apr</td><td style="padding:9px 12px;text-align:center">Amira K</td><td style="padding:9px 12px;text-align:center"><span class="badge badge-blue">📅 Scheduled</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div id="page-projects" class="page">
+  <div class="subpage-hero">
+    <div class="breadcrumb">🏠 Home › <span>Project Information</span></div>
+    <h2>📁 Project Information</h2>
+    <p>Central repository for all AIA project charters, requirements, decision logs, and meeting notes.</p>
+  </div>
+  <div class="layout full" style="padding:22px 24px;background:var(--gray)">
+    <div class="content-card">
+      <h3>📂 Document Library</h3>
+      <div class="doc-row"><div class="doc-icon" style="background:#FEE2E2">📄</div><div class="doc-name">AIA Programme Charter v2.0<div class="doc-meta">Updated 20 Feb 2026 · Amira Khalil</div></div><span class="doc-tag dt-final">Final</span></div>
+      <div class="doc-row"><div class="doc-icon" style="background:#EFF6FF">📋</div><div class="doc-name">Requirements Library — Q1 2026<div class="doc-meta">Updated 15 Feb 2026 · Sarah M</div></div><span class="doc-tag dt-final">Final</span></div>
+      <div class="doc-row"><div class="doc-icon" style="background:#FEF3C7">📝</div><div class="doc-name">Decision Log — Jan/Feb 2026<div class="doc-meta">Updated 28 Feb 2026 · Jordan P</div></div><span class="doc-tag dt-draft">Draft</span></div>
+      <div class="doc-row"><div class="doc-icon" style="background:#ECFDF5">🗓️</div><div class="doc-name">Meeting Notes Archive — Q1<div class="doc-meta">Updated 27 Feb 2026 · AIA Team</div></div><span class="doc-tag dt-final">Final</span></div>
+    </div>
+  </div>
+</div>
+<div id="page-lrl" class="page">
+  <div class="subpage-hero">
+    <div class="breadcrumb">🏠 Home › <span>LRL Training Space</span></div>
+    <h2>🎓 LRL Training Space</h2>
+    <p>Dedicated onboarding and training environment for Product Owner pairs joining the AIA team.</p>
+  </div>
+  <div class="layout full" style="padding:22px 24px;background:var(--gray)">
+    <div class="lrl-section">
+      <div class="lrl-head"><div class="lrl-icon" style="background:#ECFDF5">✉️</div><div><div class="lrl-title">Section 1 — Welcome & Introduction</div><div class="lrl-sub">Start here on Day 1 · Welcome message · First week guide</div></div></div>
+      <div class="lrl-body">
+        <div class="lrl-file"><div class="lrl-file-ico">📄</div><div><div class="lrl-file-nm">Welcome Message.pdf</div><div class="lrl-file-sz">Programme Lead · 245 KB</div></div></div>
+        <div class="lrl-file"><div class="lrl-file-ico">📋</div><div><div class="lrl-file-nm">First Week Guide.docx</div><div class="lrl-file-sz">LRL Team · 180 KB</div></div></div>
+      </div>
+    </div>
+    <div class="lrl-section">
+      <div class="lrl-head"><div class="lrl-icon" style="background:#EFF6FF">📚</div><div><div class="lrl-title">Section 2 — Generic Training</div><div class="lrl-sub">AIA overview · Ways of Working · Tools access · Glossary</div></div></div>
+      <div class="lrl-body">
+        <div class="lrl-file"><div class="lrl-file-ico">📊</div><div><div class="lrl-file-nm">AIA Overview.pptx</div><div class="lrl-file-sz">Programme · 3.4 MB</div></div></div>
+        <div class="lrl-file"><div class="lrl-file-ico">📄</div><div><div class="lrl-file-nm">Ways of Working.pdf</div><div class="lrl-file-sz">Standards · 560 KB</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="page-onboarding" class="page">
+  <div class="subpage-hero">
+    <div class="breadcrumb">🏠 Home › <span>Onboarding Hub</span></div>
+    <h2>🚀 Onboarding Hub</h2>
+    <p>Welcome to the AIA team! Everything you need for a smooth start — right here.</p>
+  </div>
+  <div class="layout full" style="padding:22px 24px;background:var(--gray)">
+    <div class="content-card">
+      <h3>👋 Your First Week — Step by Step</h3>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px">
+        <div style="display:flex;gap:14px;align-items:flex-start;background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:14px 16px"><div style="width:32px;height:32px;border-radius:50%;background:var(--red);color:#fff;font-weight:900;font-size:0.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div><div><div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:4px">Read the Welcome Message</div><div style="font-size:0.78rem;color:var(--sub);line-height:1.6">Find it in LRL Training Space → Section 1.</div></div></div>
+        <div style="display:flex;gap:14px;align-items:flex-start;background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:14px 16px"><div style="width:32px;height:32px;border-radius:50%;background:var(--red);color:#fff;font-weight:900;font-size:0.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div><div><div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:4px">Request Access to All Tools</div><div style="font-size:0.78rem;color:var(--sub);line-height:1.6">Follow the Tools Access Guide in LRL Section 2.</div></div></div>
+        <div style="display:flex;gap:14px;align-items:flex-start;background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:14px 16px"><div style="width:32px;height:32px;border-radius:50%;background:#10B981;color:#fff;font-weight:900;font-size:0.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">✔</div><div><div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:4px">Complete Sign-Off & Submit Feedback</div><div style="font-size:0.78rem;color:var(--sub);line-height:1.6">Fill in the Completion Checklist and get manager sign-off.</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="page-permissions" class="page">
+  <div class="subpage-hero">
+    <div class="breadcrumb">🏠 Home › <span>Permissions Matrix</span></div>
+    <h2>🔐 Permissions & Access Control</h2>
+    <p>Who can see and do what across the AIA Central Hub.</p>
+  </div>
+  <div class="layout full" style="padding:22px 24px;background:var(--gray)">
+    <div class="content-card">
+      <h3>📋 Full Permission Matrix</h3>
+      <div class="perm-wrap">
+        <table class="perm-t">
+          <thead><tr><th style="text-align:left">Page / Feature</th><th>👔 Leadership</th><th>🧑‍💻 Internal</th><th>🌱 New Joiners</th><th>🔑 Owners</th></tr></thead>
+          <tbody>
+            <tr><td>Homepage</td><td class="chk">✔</td><td class="chk">✔</td><td class="chk">✔</td><td class="chk">✔ Edit</td></tr>
+            <tr><td>Leadership Dashboard</td><td class="chk">✔ Full</td><td class="crs">—</td><td class="crs">—</td><td class="chk">✔ Edit</td></tr>
+            <tr><td>Project Information</td><td class="vw">View</td><td class="chk">✔ Full</td><td class="vw">Read</td><td class="chk">✔ Edit</td></tr>
+            <tr><td>LRL Training Space</td><td class="vw">View</td><td class="chk">✔ Full</td><td class="chk">✔ Full</td><td class="chk">✔ Edit</td></tr>
+            <tr><td>Onboarding Hub</td><td class="crs">—</td><td class="vw">View</td><td class="chk">✔ Full</td><td class="chk">✔ Edit</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="page-tracker" class="page">
+  <div class="subpage-hero">
+    <div class="breadcrumb">🏠 Home › <span>Training Tracker</span></div>
+    <h2>📊 Training Completion Tracker</h2>
+    <p>Live view of PO pair training progress across all cohorts.</p>
+  </div>
+  <div class="layout full" style="padding:22px 24px;background:var(--gray)">
+    <div class="content-card">
+      <h3>📋 Master Tracker — All Cohorts</h3>
+      <div class="trk-wrap">
+        <table class="trk-t">
+          <thead><tr><th>PO Pair</th><th>Cohort</th><th>Module 1</th><th>Module 2</th><th>Module 3</th><th>Module 4</th><th>Progress</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Alex J / Sam L</td><td>Cohort 1</td><td><span class="bd">✔ Done</span></td><td><span class="bd">✔ Done</span></td><td><span class="bd">✔ Done</span></td><td><span class="bd">✔ Done</span></td><td><span class="pbar"><span class="pfill" style="width:100%"></span></span> 100%</td><td><span class="bd">Complete</span></td></tr>
+            <tr><td>Jordan P / Chris W</td><td>Cohort 2</td><td><span class="bd">✔ Done</span></td><td><span class="bd">✔ Done</span></td><td><span class="bp">⏳ In Progress</span></td><td><span class="bn">Pending</span></td><td><span class="pbar"><span class="pfill" style="width:50%"></span></span> 50%</td><td><span class="bp">In Progress</span></td></tr>
+            <tr><td>Taylor S / Morgan D</td><td>Cohort 3</td><td><span class="bp">⏳ In Progress</span></td><td><span class="bn">Pending</span></td><td><span class="bn">Pending</span></td><td><span class="bn">Pending</span></td><td><span class="pbar"><span class="pfill" style="width:25%"></span></span> 25%</td><td><span class="bn">Not Started</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="page-rollout" class="page">
+  <div class="subpage-hero">
+    <div class="breadcrumb">🏠 Home › <span>Rollout Plan</span></div>
+    <h2>🗓️ 8-Week Rollout Plan</h2>
+    <p>Phased delivery plan from foundation to go-live.</p>
+  </div>
+  <div class="layout full" style="padding:22px 24px;background:var(--gray)">
+    <div class="content-card">
+      <h3>📅 Delivery Timeline</h3>
+      <div class="tl" style="margin-top:8px">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-wk">Week 1–2</div><div class="tl-ph">Phase 1 — Foundation & Discovery</div><div class="tl-de">Provision hub site · Set up security groups · Audit existing SharePoints</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-wk">Week 3–4</div><div class="tl-ph">Phase 2 — Core Pages Build</div><div class="tl-de">Build homepage · Create all sub-pages · Migrate existing content</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-wk">Week 5–6</div><div class="tl-ph">Phase 3 — UAT & Refinement</div><div class="tl-de">User testing · Gather feedback · Fix permissions · Leadership sign-off</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-wk">Week 8</div><div class="tl-ph">Phase 4 — Go Live 🎉</div><div class="tl-de">Decommission old SharePoints · Team-wide comms · Update bookmarks</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="site-footer">
+  <div class="sf-brand">eli <strong>lilly</strong> &nbsp;·&nbsp; CSP AIA Programme Hub &nbsp;·&nbsp; Last updated: 28 Feb 2026</div>
+  <div class="sf-links"><a>Privacy</a><a>Accessibility</a><a>Contact Site Owner</a><a>Report an Issue</a></div>
+</div>
+</div>
+<script>
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn){document.querySelectorAll('.ps-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+}
+function setNav(el){document.querySelectorAll('.sn').forEach(n=>n.classList.remove('active'));el.classList.add('active');}
+</script>
+</body>
+</html>
